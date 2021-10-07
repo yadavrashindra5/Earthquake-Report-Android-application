@@ -2,6 +2,7 @@ package com.example.quakereport;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,6 +29,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity{
     private RequestQueue mQueue;
+    ProgressDialog dialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,8 +38,9 @@ public class MainActivity extends AppCompatActivity{
         mQueue= Volley.newRequestQueue(this);
 
         ArrayList<Earthquake> earthquakes=new ArrayList<>();
-
-        //fun(SAMPLE_JSON_RESPONSE,earthquakes);
+        dialog=new ProgressDialog(this);
+        dialog.setMessage("please wait");
+        dialog.show();
 
         String url="https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson";
         JsonObjectRequest request=new JsonObjectRequest(Request.Method.GET, url, null,
@@ -57,7 +61,6 @@ public class MainActivity extends AppCompatActivity{
                                 String timee=String.valueOf(time);
                                 earthquakes.add(new Earthquake(magnitude,place,timee,url1));
                             }
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
